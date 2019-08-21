@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "baddream",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "bad dream",
+  "description": "Wake up.",
   "authors": [
-    "Me!"
+    "quaternary"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://quat1024.github.io/",
+    "sources": "https://github.com/quat1024/bad-dream"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "MPL-2.0",
+  "icon": "assets/baddream/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
-    ]
+      "quaternary.baddream.BadDream"
+    ],
+    "client": [
+			"quaternary.baddream.BadDreamClient"
+		]
   },
   "mixins": [
-    "modid.mixins.json"
+    "baddream.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }

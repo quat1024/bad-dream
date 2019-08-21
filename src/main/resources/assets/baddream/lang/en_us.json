@@ -1,0 +1,4 @@
+{
+	"baddream.command.createdimension.existed": "Dream dimension already exists for player %s",
+	"baddream.command.createdimension.created": "Generated new dream dimension for player %s"
+}

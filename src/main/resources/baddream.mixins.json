@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "quaternary.baddream.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "prstole.DimensionTypeMixin",
+		"prstole.EntityMixin",
+		"prstole.EntityAccessor",
+		"prstole.PortalForcerMixin",
+    "MinecraftServerMixin",
+		"MinecraftServerAccessor",
+    "PlayerManagerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
