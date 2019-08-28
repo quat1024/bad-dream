@@ -3,13 +3,16 @@ package quaternary.baddream.util;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import quaternary.baddream.BadDream;
 import quaternary.baddream.mixin.prstole.EntityAccessor;
+import quaternary.baddream.world.data.DreamPlayerData;
 import quaternary.baddream.world.dim.DreamDimensionType;
 
 public final class KnockoffFabricDimensionInternals {
@@ -56,33 +59,27 @@ public final class KnockoffFabricDimensionInternals {
 			return null;
 		}
 		
-		// Custom placement logic, falls back to default dimension placement if no placement or target found
-		/*
-		EntityPlacer customPlacement = CUSTOM_PLACEMENT.get();
-		if (customPlacement != null) {
-			BlockPattern.TeleportTarget customTarget = customPlacement.placeEntity(teleported, destination, portalDir, portalX, portalY);
-			if (customTarget != null) {
-				return customTarget;
-			}
-		}*/
-		
-		// Default placement logic, falls back to vanilla if not a fabric dimension
+		//entering a dream
 		DimensionType dimType = destination.getDimension().getType();
 		if(dimType instanceof DreamDimensionType) {
 			return new BlockPattern.TeleportTarget(
-				new Vec3d(20, 20, 20), //pos (TODO)
+				new Vec3d(0, 100, 0), //pos (TODO)
 				new Vec3d(0, 0, 0), //velocity
 				0 //yaw
 			);
 		}
-		/*
-		if (dimType instanceof FabricDimensionType) {
-			BlockPattern.TeleportTarget defaultTarget = ((FabricDimensionType) dimType).getDefaultPlacement().placeEntity(teleported, destination, portalDir, portalX, portalY);
-			if (defaultTarget == null) {
-				throw new IllegalStateException("Mod dimension " + DimensionType.getId(dimType) + " returned an invalid teleport target");
+		
+		//leaving a dream
+		if(teleported instanceof PlayerEntity && dimType == DimensionType.OVERWORLD) {
+			DreamPlayerData data = DreamPlayerData.get((PlayerEntity) teleported);
+			if(data.isDreaming()) {
+				return new BlockPattern.TeleportTarget(
+					data.getEntryPos(),
+					new Vec3d(0, 0, 0),
+					(int) data.getEntryYaw()
+				);
 			}
-			return defaultTarget;
-		}*/
+		}
 		
 		// Vanilla / other implementations logic, undefined behaviour on custom dimensions
 		return null;

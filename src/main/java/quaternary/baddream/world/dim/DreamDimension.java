@@ -1,16 +1,11 @@
 package quaternary.baddream.world.dim;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.SystemUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.FixedBiomeSource;
 import net.minecraft.world.biome.source.FixedBiomeSourceConfig;
@@ -20,6 +15,9 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorType;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
+import net.minecraft.world.gen.chunk.OverworldChunkGeneratorConfig;
+import quaternary.baddream.world.gen.DreamChunkGenerator;
+import quaternary.baddream.world.gen.biome.BadDreamBiomes;
 
 import java.util.UUID;
 
@@ -36,19 +34,10 @@ public class DreamDimension extends Dimension {
 	@Override
 	public ChunkGenerator<?> createChunkGenerator() {
 		//TODO
-		FixedBiomeSourceConfig biomeConfig = new FixedBiomeSourceConfig().setBiome(Biomes.DESERT);
+		FixedBiomeSourceConfig biomeConfig = new FixedBiomeSourceConfig().setBiome(BadDreamBiomes.DREAM_PLAINS);
 		BiomeSource biomeSource = new FixedBiomeSource(biomeConfig);
 		
-		FlatChunkGeneratorConfig flatConfig = new FlatChunkGeneratorConfig();
-		flatConfig.setBiome(biomeConfig.getBiome());
-		flatConfig.getLayers().add(new FlatChunkGeneratorLayer(10, Blocks.BONE_BLOCK));
-		flatConfig.updateLayerBlocks();
-		
-		return ChunkGeneratorType.FLAT.create(
-			world,
-			biomeSource,
-			flatConfig
-		);
+		return new DreamChunkGenerator(world, biomeSource, new OverworldChunkGeneratorConfig());
 	}
 	
 	@Override
@@ -74,9 +63,9 @@ public class DreamDimension extends Dimension {
 	@Override
 	public Vec3d getFogColor(float var1, float var2) {
 		return new Vec3d(
-			0.05, 
-			0.10,
-			(Math.sin(SystemUtil.getMeasuringTimeMs() / 1000f) / 2f) + 0.5
+			0.25, 
+			0.27,
+			0.26
 		);
 	}
 	
@@ -87,7 +76,7 @@ public class DreamDimension extends Dimension {
 	
 	@Override
 	public boolean shouldRenderFog(int var1, int var2) {
-		return true;
+		return false;
 	}
 	
 	@Override

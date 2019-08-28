@@ -44,6 +44,13 @@ public class DreamDimensionState extends PersistentState {
 	
 	public void remove(int rawId) {
 		dimensionMap.remove(rawId);
+		System.out.println(rawId);
+		markDirty();
+	}
+	
+	public void clear() {
+		dimensionMap.clear();
+		markDirty();
 	}
 	
 	@Override
@@ -64,13 +71,15 @@ public class DreamDimensionState extends PersistentState {
 	
 	@Override
 	public void fromTag(CompoundTag tag) {
-		dimensionMap.clear();
+		clear();
 		
 		ListTag list = tag.getList(name(), 10);
 		for(Tag t : list) {
 			CompoundTag pair = (CompoundTag) t;
 			dimensionMap.put(pair.getInt("rawId"), pair.getUuid("dreamer"));
 		}
+		
+		markDirty();
 	}
 	
 	public interface DimensionConsumer {

@@ -1,4 +1,9 @@
 {
 	"baddream.command.createdimension.existed": "Dream dimension already exists for player %s",
-	"baddream.command.createdimension.created": "Generated new dream dimension for player %s"
+	"baddream.command.createdimension.created": "Generated new dream dimension for player %s",
+	
+	"baddream.command.delete.deleted": "Deleted dream %s",
+	"baddream.command.delete.cant": "Can't delete dream %s, someone is in it",
+	"baddream.command.delete.failed": "Failed to delete dream %s, see server log for more details",
+	"baddream.command.delete.nothing": "Nothing to delete"
 }

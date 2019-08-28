@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import quaternary.baddream.BadDream;
 import quaternary.baddream.world.dim.DreamDimensionType;
 import quaternary.baddream.world.state.DreamDimensionState;
 
@@ -26,7 +27,7 @@ public abstract class MinecraftServerMixin {
 		
 		//state.forEachDimension(DreamDimensionType::forceRegister);
 		state.forEachDimension((rawId, dreamerUuid) -> {
-			System.out.println("MIXINMINECRAFTSERVER registering " + dreamerUuid + " to raw ID " + rawId);
+			BadDream.LOGGER.info("[baddream] Just-in-time registering dream dimension for {} to raw ID {}", dreamerUuid, rawId);
 			DreamDimensionType.forceRegister(rawId, dreamerUuid);
 		});
 	}
