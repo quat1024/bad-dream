@@ -14,6 +14,8 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.chunk.ChunkGeneratorType;
 import net.minecraft.world.gen.chunk.OverworldChunkGenerator;
 import net.minecraft.world.gen.chunk.OverworldChunkGeneratorConfig;
+import quaternary.baddream.util.BetterNoiseSamplerLmao;
+import quaternary.baddream.world.gen.biome.SpecialBiome;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,21 +26,45 @@ public class DreamChunkGenerator extends OverworldChunkGenerator {
 		super(iWorld_1, biomeSource_1, overworldChunkGeneratorConfig_1);
 	}
 	
-	private final OctavePerlinNoiseSampler noiseSampleBias = new OctavePerlinNoiseSampler(random, 4);
+	private final BetterNoiseSamplerLmao noiseSampleBias = new BetterNoiseSamplerLmao(random, 4);
 	
 	@Override
 	protected void sampleNoiseColumn(double[] doubles, int x, int z) {
 		super.sampleNoiseColumn(doubles, x, z);
-		double bias = 20 * noiseSampleBias.sample(x / 30d, z / 30d, 0);
 		
-		for(int i = 0; i < doubles.length; i++) {
-			if(random.nextInt(40) == 0) doubles[i] *= 3;
-			if(random.nextInt(40) == 0) doubles[i] /= 3;
-			if(i < doubles.length - 4) {
-				double difference = (random.nextDouble() * 10) - bias;
-				if(difference > 0) doubles[i] += difference * 2;
+		Biome biome = biomeSource.getBiomeForNoiseGen(x, z);
+		if(biome instanceof SpecialBiome) {
+			SpecialBiome special = (SpecialBiome) biome;
+			
+			int spikeRarity = special.getSpikeRarity(random);
+			if(spikeRarity != 0 && random.nextInt(spikeRarity) == 0) {
+				Arrays.sort(doubles, 0, doubles.length - special.getSpikeHeightSubtraction(random));
+			} else {
+				for(int i = 0; i < doubles.length; i++) {
+					int perturbRarity = special.getPerturbRarity(random);
+					if(perturbRarity != 0) {
+						if(random.nextInt(special.getPerturbRarity(random)) == 0) doubles[i] *= 3;
+						if(random.nextInt(special.getPerturbRarity(random)) == 0) doubles[i] /= 3;
+					}
+					
+					
+				}
 			}
 		}
+		
+		/*
+		double bias = 20 * noiseSampleBias.sample(x / 10d, z / 10d, 0);
+		
+		{
+			for(int i = 0; i < doubles.length; i++) {
+				if(random.nextInt(40) == 0) doubles[i] *= 3;
+				if(random.nextInt(40) == 0) doubles[i] /= 3;
+				if(i < doubles.length - 4) {
+					double difference = (random.nextDouble()) - bias;
+					if(difference > 0) doubles[i] += 0.1 * difference * (doubles.length - i);
+				}
+			}
+		}*/
 	}
 	
 	@Override
